@@ -8,8 +8,9 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import {register} from './controllers/auth.js'
-import authRoutes from './routes/auth.js'
+import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js";
+import { verifyToken } from "./middleware/auth.js";
 // Configuration
 const PORT = process.env.PORT || 3001;
 const __filename = fileURLToPath(import.meta.url);
@@ -26,7 +27,6 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
-
 // fileStore
 
 const storage = multer.diskStorage({
@@ -42,15 +42,13 @@ const upload = multer({ storage }); //to upload user files to disk
 
 //auth routes
 
-app.post('/auth/register',upload.single('picture'),register)
+app.post("/auth/register", upload.single("picture"), register);
 
+app.use("/auth", authRoutes);
 
-app.use('/auth',authRoutes)
-
-
-
-
-
+app.post("/authtest", verifyToken, (req, res) => {
+  res.json({ data: req.user });
+});
 
 //mongoose
 
