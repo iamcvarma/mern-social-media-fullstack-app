@@ -10,6 +10,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/users.js";
+import postRoutes from './routes/posts.js';
+import {createPost} from './controllers/posts.js'
 import { verifyToken } from "./middleware/auth.js";
 // Configuration
 const PORT = process.env.PORT || 3001;
@@ -43,12 +46,14 @@ const upload = multer({ storage }); //to upload user files to disk
 //auth routes
 
 app.post("/auth/register", upload.single("picture"), register);
+app.post('/posts',verifyToken,upload.single("picture"),createPost)
+
 
 app.use("/auth", authRoutes);
 
-app.post("/authtest", verifyToken, (req, res) => {
-  res.json({ data: req.user });
-});
+app.use("/users", userRoutes);
+
+app.use('/posts',postRoutes)
 
 //mongoose
 
