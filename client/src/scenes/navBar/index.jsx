@@ -46,9 +46,9 @@ const NavBar = () => {
         <Typography
           fontWeight="bold"
           fontSize="clapm(1rem,2rem,2.25rem)"
-          onClick={() => navigate("/home")}
+          onClick={() => {navigate('../home',{replace:true})}}
           sx={{
-            "&hover": {
+            "&:hover": {
               color: primaryLight,
               cursor: "pointer",
             },
@@ -105,7 +105,10 @@ const NavBar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={()=>dispatch(setLogout())} >Log Out</MenuItem>
+              <MenuItem onClick={()=>{
+                navigate('/',{replace:true})
+                dispatch(setLogout());
+                }} >Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -168,7 +171,10 @@ const NavBar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={()=>dispatch(setLogout())} >Log Out</MenuItem>
+              <MenuItem onClick={()=>{
+                navigate('/',{replace:true})
+                dispatch(setLogout());
+                }} >Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
