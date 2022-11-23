@@ -19,7 +19,7 @@ export const register = async (req, res, next) => {
     delete newSavedUser._doc.password
     res.status(201).json({ data: newSavedUser });
   } catch (e) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: e.message });
   }
 };
 
