@@ -4,7 +4,7 @@ export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
-    res.status(200).json({ data:user });
+    res.status(200).json({ data: user });
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
@@ -27,9 +27,9 @@ export const getUserFriends = async (req, res) => {
         picurePath,
       })
     );
-    res.send(200).json({ data: preformatted });
+    res.status(200).json({ data: preformatted });
   } catch (err) {
-    res.send(404).json({ message: err.message });
+    res.status(404).json({ message: err.message });
   }
 };
 
@@ -65,8 +65,8 @@ export const addRemoveFriends = async (req, res) => {
         picurePath,
       })
     );
-    res.send(200).json({ data: preformatted });
+    res.status(200).json({ data: preformatted });
   } catch (err) {
-    res.send(404).json({ message: err.message });
+    res.status(404).json({ message: err.message });
   }
 };
