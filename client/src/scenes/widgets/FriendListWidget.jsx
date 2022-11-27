@@ -12,10 +12,10 @@ const FriendListWidget = ({ userId }) => {
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
-
+  console.log('friends',friends)
   const getFriends = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/${userId}/friends`,
+      `${process.env.REACT_APP_BASE_URL}/users/${userId}/friends`,
       {
         method: "GET",
         headers: {
@@ -49,7 +49,7 @@ const FriendListWidget = ({ userId }) => {
             friendId={friend._id}
             name={`${friend.firstName} ${friend.lastName}`}
             subtitle={friend.occupation}
-            userPicturePath={friend.userPicturePath}
+            userPicturePath={friend.picturePath}
           />
         ))}
       </Box>

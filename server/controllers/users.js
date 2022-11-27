@@ -13,18 +13,19 @@ export const getUser = async (req, res) => {
 export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id)
     const user = await User.findById(id);
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
     );
     const preformatted = friends.map(
-      ({ _id, firstName, lastName, occupation, location, picurePath }) => ({
+      ({ _id, firstName, lastName, occupation, location, picturePath }) => ({
         _id,
         firstName,
         lastName,
         occupation,
         location,
-        picurePath,
+        picturePath,
       })
     );
     res.status(200).json({ data: preformatted });
@@ -36,7 +37,7 @@ export const getUserFriends = async (req, res) => {
 export const addRemoveFriends = async (req, res) => {
   try {
     const { id, friendId } = req.params;
-
+    console.log(id,friendId)
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
 
@@ -56,13 +57,13 @@ export const addRemoveFriends = async (req, res) => {
       user.friends.map((id) => User.findById(id))
     );
     const preformatted = friends.map(
-      ({ _id, firstName, lastName, occupation, location, picurePath }) => ({
+      ({ _id, firstName, lastName, occupation, location, picturePath }) => ({
         _id,
         firstName,
         lastName,
         occupation,
         location,
-        picurePath,
+        picturePath,
       })
     );
     res.status(200).json({ data: preformatted });
