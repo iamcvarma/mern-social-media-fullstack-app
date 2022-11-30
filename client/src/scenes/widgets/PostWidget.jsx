@@ -7,7 +7,7 @@ import {
   ShareOutlined,
 } from "@mui/icons-material";
 
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, IconButton, InputBase, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -27,6 +27,7 @@ const PostWidget = ({
   comments,
 }) => {
   const [isComments, setIsComments] = useState(false);
+  const [userComment,setUserComment] = useState('')
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUser = useSelector((state) => state.user._id);
@@ -52,6 +53,24 @@ const PostWidget = ({
     const { data: newPost } = await response.json();
     dispatch(setPost({ post: newPost }));
   };
+
+  const patchComment = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_BASE_URL}/posts/${postId}/comment`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: loggedInUser ,comment:userComment}),
+      }
+    );
+    const { data: newPost } = await response.json();
+    setUserComment("")
+    dispatch(setPost({ post: newPost }));
+  };
+
 
   return (
     <WidgetWrapper m="2rem 0">
@@ -97,6 +116,8 @@ const PostWidget = ({
         </IconButton>
       </FlexBetween>
       {isComments &&(
+        <>
+        
          <Box mt="0.5rem">
             {comments.map((comment,i)=>(
                 <Box
@@ -113,6 +134,43 @@ const PostWidget = ({
 
             ))}
          </Box>
+         <FlexBetween sx={{paddingTop:"1rem"}}>
+          
+         <InputBase
+          placeholder="Write a comment..."
+          value={userComment}
+          onChange={(e)=>setUserComment(e.target.value)}
+          sx={{
+            width: "100%",
+            backgroundColor: palette.neutral.light,
+            borderRadius: "1rem",
+            padding: "0.5rem 1rem",
+          }}
+        />
+        <Button
+          disabled={!userComment}
+          onClick={patchComment}
+          sx={{
+            color: palette.background.alt,
+            backgroundColor: palette.primary.main,
+            borderRadius: "1rem",
+            padding: "0.5rem 1rem",
+            marginLeft:"0.5rem",
+            "&:hover": {
+              cursor: "pointer",
+              color: palette.primary.light,
+              backgroundColor:palette.primary.dark
+            },
+            "&:disabled":{
+              color:palette.background.alt,
+              backgroundColor:palette.neutral.main
+            }
+          }}
+        >
+          POST
+        </Button>
+         </FlexBetween>
+        </>
       )}
     </WidgetWrapper>
   );

@@ -12,7 +12,6 @@ const FriendListWidget = ({ userId }) => {
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
-  console.log('friends',friends)
   const getFriends = async () => {
     const response = await fetch(
       `${process.env.REACT_APP_BASE_URL}/users/${userId}/friends`,

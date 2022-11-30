@@ -11,9 +11,10 @@ import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
-import postRoutes from './routes/posts.js';
-import {createPost} from './controllers/posts.js'
+import postRoutes from "./routes/posts.js";
+import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
+import { getPreSignedUrlS3, uploadToS3 } from "./middleware/awsUpload.js";
 // Configuration
 const PORT = process.env.PORT || 3001;
 const __filename = fileURLToPath(import.meta.url);
@@ -32,29 +33,28 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // fileStore
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/assets");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
+const storage = multer.memoryStorage()
 
 const upload = multer({ storage }); //to upload user files to disk
 
 //auth routes
 
-app.post("/auth/register", upload.single("picture"), register);
-app.post('/posts',verifyToken,upload.single("picture"),createPost)
-
+app.post("/auth/register", upload.single("picture"), uploadToS3, register);
+app.post(
+  "/posts",
+  verifyToken,
+  upload.single("picture"),
+  uploadToS3,
+  createPost
+);
 
 app.use("/auth", authRoutes);
 
 app.use("/users", userRoutes);
 
-app.use('/posts',postRoutes)
+app.use("/posts", postRoutes);
 
+app.use("/assets/:fileName", getPreSignedUrlS3);
 //mongoose
 
 mongoose

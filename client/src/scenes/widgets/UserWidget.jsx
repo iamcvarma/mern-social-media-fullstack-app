@@ -4,13 +4,14 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme } from "@mui/material";
+import { Box, Typography, Divider, useTheme, Link } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
@@ -52,6 +53,8 @@ const UserWidget = ({ userId, picturePath }) => {
   } = user;
 
   return (
+    <>
+    
     <WidgetWrapper>
       {/* FIRST ROW */}
       <FlexBetween
@@ -148,6 +151,29 @@ const UserWidget = ({ userId, picturePath }) => {
         </FlexBetween>
       </Box>
     </WidgetWrapper>
+    <Box sx={{
+      display:"flex",
+      justifyContent:"center",
+      alignItems:"center"
+    }}>
+      <Typography
+      sx={{
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
+      }}
+      >
+        made by  
+        <GitHubIcon fontSize="small" sx={{margin:"0.2rem"}}/>
+        
+        <Link href="https://github.com/iamcvarma" target="_blank" underline="hover" sx={{"&:hover":{
+          color:"#CC5500"
+        }}}>
+        iamcvarma
+        </Link>
+      </Typography>
+    </Box>
+    </>
   );
 };
 

@@ -51,10 +51,8 @@ const ProfilePage = () => {
         </Box>
         <Box
           flexBasis={isNonMobileScreen ? "42%" : undefined}
-          mt={isNonMobileScreen ? undefined : "2rem"}
+          mt="0rem 0rem"
         >
-          <MyPostWidget picturePath={user?.picturePath} />
-          <Box m="2rem 0"/>
           <PostsWidget userId={userId} isProfile/>
         </Box>
       </Box>

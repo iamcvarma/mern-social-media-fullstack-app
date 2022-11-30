@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-import Form from './Form'
+import Form from "./Form";
 
 const LoginPage = () => {
   const theme = useTheme();
@@ -18,14 +18,14 @@ const LoginPage = () => {
         </Typography>
       </Box>
       <Box
-      width={isNonMobileScreen?"50%":"93%"}
-      p="2rem"
-      m="2rem auto"
-      borderRadius="1.5rem"
-      backgroundColor={theme.palette.background.alt}
+        width={isNonMobileScreen ? "50%" : "93%"}
+        p="2rem"
+        m="2rem auto"
+        borderRadius="1.5rem"
+        backgroundColor={theme.palette.background.alt}
       >
-        <Typography fontWeight='500' varient="h5" sx={{md:'1.5rem'}}>
-        Welcome to Bubble Wrap, the future of social media and networking.
+        <Typography fontWeight="500" varient="h5" sx={{ mb: "1.5rem" }}>
+          Welcome to Bubble Wrap, the future of social media and networking.
         </Typography>
         <Form />
       </Box>

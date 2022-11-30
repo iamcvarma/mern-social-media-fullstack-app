@@ -1,4 +1,3 @@
-import e from "express";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 
@@ -37,7 +36,7 @@ export const getFeedPosts = async (req, res) => {
     const allPosts = await Post.find();
     res.status(200).json({ data: allPosts });
   } catch (err) {
-    res.send(404).json({ message: err.message });
+    res.status(404).json({ message: err.message });
   }
 };
 
@@ -47,7 +46,7 @@ export const getUserPosts = async (req, res) => {
     const allPosts = await Post.find({ userId });
     res.status(200).json({ data: allPosts });
   } catch (err) {
-    res.send(404).json({ message: err.message });
+    res.status(404).json({ message: err.message });
   }
 };
 
@@ -70,8 +69,26 @@ export const likePost = async (req, res) => {
       { likes: post.likes },
       { new: true }
     );
-    res.status(200).json({data:updatedPost})
+    res.status(200).json({ data: updatedPost });
   } catch (err) {
-    res.send(404).json({ message: err.message });
+    res.status(404).json({ message: err.message });
+  }
+};
+export const commentPost = async (req, res) => {
+  try {
+
+    const { id } = req.params;
+    const { userId ,comment} = req.body;
+    const {comments} = await Post.findById(id);
+    const { firstName, lastName } = await User.findById(userId);
+    comments.push(`${firstName} ${lastName}: ${comment}`)
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { comments:comments },
+      { new: true }
+    );
+    res.status(200).json({ data: updatedPost });
+  } catch(err){
+    res.status(404).json({ message: err.message });
   }
 };
