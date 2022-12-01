@@ -11,7 +11,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import {
-  Search,
   Message,
   DarkMode,
   LightMode,
@@ -36,41 +35,21 @@ const NavBar = () => {
   const neutralLight = theme.palette.neutral.light;
   const dark = theme.palette.neutral.dark;
   const background = theme.palette.background.default;
-  const primaryLight = theme.palette.primary.light;
+  //const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
   const fullName = `${user?.firstName} ${user?.lastName}`;
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
-      <FlexBetween gap="1.75rem">
-        <Typography
-          fontWeight="bold"
-          fontSize="clapm(1rem,2rem,2.25rem)"
-          onClick={() => {navigate('../home',{replace:true})}}
-          sx={{
-            "&:hover": {
-              color: primaryLight,
-              cursor: "pointer",
-            },
-          }}
-        >
-          Bubble Wrap
-        </Typography>
-        {isNonMobileScreen && (
-          <FlexBetween
-            backgroundColor={neutralLight}
-            borderRadius="9px"
-            gap="3rem"
-            padding="0.1rem 1.5rem"
-          >
-            <InputBase placeholder="Search...">
-              <IconButton>
-                <Search />
-              </IconButton>
-            </InputBase>
-          </FlexBetween>
-        )}
+      <FlexBetween gap="1.75rem" marginX="9rem" 
+      onClick={()=>navigate("/home")}
+      sx={{
+        cursor:"pointer"
+      }} >
+        <img alt="logo" src = '../assets/logo.png' width="120px"/>
+        
       </FlexBetween>
+      
       {/* Desktop Nav*/}
       {isNonMobileScreen ? (
         <FlexBetween gap="2rem">

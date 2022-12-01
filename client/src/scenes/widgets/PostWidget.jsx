@@ -7,7 +7,16 @@ import {
   ShareOutlined,
 } from "@mui/icons-material";
 
-import { Box, Button, Divider, IconButton, InputBase, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Fade,
+  IconButton,
+  InputBase,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -27,7 +36,7 @@ const PostWidget = ({
   comments,
 }) => {
   const [isComments, setIsComments] = useState(false);
-  const [userComment,setUserComment] = useState('')
+  const [userComment, setUserComment] = useState("");
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUser = useSelector((state) => state.user._id);
@@ -63,14 +72,13 @@ const PostWidget = ({
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: loggedInUser ,comment:userComment}),
+        body: JSON.stringify({ userId: loggedInUser, comment: userComment }),
       }
     );
     const { data: newPost } = await response.json();
-    setUserComment("")
+    setUserComment("");
     dispatch(setPost({ post: newPost }));
   };
-
 
   return (
     <WidgetWrapper m="2rem 0">
@@ -115,63 +123,56 @@ const PostWidget = ({
           <ShareOutlined />
         </IconButton>
       </FlexBetween>
-      {isComments &&(
-        <>
-        
-         <Box mt="0.5rem">
-            {comments.map((comment,i)=>(
-                <Box
-                key = {`${name}-${i}`}
-                >
-                    <Divider/>
-                    <Typography
-                    sx={{color:main, m:'0.5rem 0',pl:'1rem'}}
-                    >
-                        {comment}
-                    </Typography>
+      <Fade in={isComments} sx={{display:isComments?"block":"none"}}>
+        <Box>
+          <Box mt="0.5rem">
+            {comments.map((comment, i) => (
+              <Box key={`${name}-${i}`}>
                 <Divider />
-                </Box>
-
+                <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
+                  {comment}
+                </Typography>
+                <Divider />
+              </Box>
             ))}
-         </Box>
-         <FlexBetween sx={{paddingTop:"1rem"}}>
-          
-         <InputBase
-          placeholder="Write a comment..."
-          value={userComment}
-          onChange={(e)=>setUserComment(e.target.value)}
-          sx={{
-            width: "100%",
-            backgroundColor: palette.neutral.light,
-            borderRadius: "1rem",
-            padding: "0.5rem 1rem",
-          }}
-        />
-        <Button
-          disabled={!userComment}
-          onClick={patchComment}
-          sx={{
-            color: palette.background.alt,
-            backgroundColor: palette.primary.main,
-            borderRadius: "1rem",
-            padding: "0.5rem 1rem",
-            marginLeft:"0.5rem",
-            "&:hover": {
-              cursor: "pointer",
-              color: palette.primary.light,
-              backgroundColor:palette.primary.dark
-            },
-            "&:disabled":{
-              color:palette.background.alt,
-              backgroundColor:palette.neutral.main
-            }
-          }}
-        >
-          POST
-        </Button>
-         </FlexBetween>
-        </>
-      )}
+          </Box>
+          <FlexBetween sx={{ paddingTop: "1rem" }}>
+            <InputBase
+              placeholder="Write a comment..."
+              value={userComment}
+              onChange={(e) => setUserComment(e.target.value)}
+              sx={{
+                width: "100%",
+                backgroundColor: palette.neutral.light,
+                borderRadius: "1rem",
+                padding: "0.5rem 1rem",
+              }}
+            />
+            <Button
+              disabled={!userComment}
+              onClick={patchComment}
+              sx={{
+                color: palette.background.alt,
+                backgroundColor: palette.primary.main,
+                borderRadius: "1rem",
+                padding: "0.5rem 1rem",
+                marginLeft: "0.5rem",
+                "&:hover": {
+                  cursor: "pointer",
+                  color: palette.primary.light,
+                  backgroundColor: palette.primary.dark,
+                },
+                "&:disabled": {
+                  color: palette.background.alt,
+                  backgroundColor: palette.neutral.main,
+                },
+              }}
+            >
+              POST
+            </Button>
+          </FlexBetween>
+        </Box> 
+      </Fade>
     </WidgetWrapper>
   );
 };

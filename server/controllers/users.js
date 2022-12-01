@@ -13,7 +13,6 @@ export const getUser = async (req, res) => {
 export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id)
     const user = await User.findById(id);
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
@@ -37,7 +36,6 @@ export const getUserFriends = async (req, res) => {
 export const addRemoveFriends = async (req, res) => {
   try {
     const { id, friendId } = req.params;
-    console.log(id,friendId)
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
 
@@ -71,3 +69,18 @@ export const addRemoveFriends = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+export const searchHandler = async (req,res)=>{
+  try {
+
+    const {keyword} = req.params;
+    //db.users.find({ "name": { "$regex": "^Da|^Ali", "$options": "i" } })
+    const friends = await User.find().or([
+      {firstName:{"$regex":`^${keyword}`,"$options": "i" }},
+      {lastName:{"$regex":`^${keyword}`,"$options": "i" }}
+    ])
+    res.status(200).json({data:friends})
+  } catch(err){
+    res.json({err:err.message})
+  }
+}

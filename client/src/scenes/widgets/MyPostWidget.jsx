@@ -17,6 +17,7 @@ import {
   Button,
   IconButton,
   useMediaQuery,
+  Fade,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Dropzone from "react-dropzone";
@@ -77,7 +78,7 @@ const MyPostWidget = ({ picturePath }) => {
           }}
         />
       </FlexBetween>
-      {isImage && (
+      <Fade in={isImage} sx={{display:isImage?"block":"none"}}>
         <Box
           border={`1px solid ${medium}`}
           borderRadius="5px"
@@ -121,7 +122,7 @@ const MyPostWidget = ({ picturePath }) => {
             )}
           </Dropzone>
         </Box>
-      )}
+      </Fade>
 
       <Divider sx={{ margin: "1.25rem 0" }} />
 

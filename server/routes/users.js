@@ -3,6 +3,7 @@ import {
   getUser,
   getUserFriends,
   addRemoveFriends,
+  searchHandler,
 } from "../controllers/users.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -16,4 +17,5 @@ router.get('/:id/friends',verifyToken,getUserFriends)
 
 router.patch('/:id/:friendId',verifyToken,addRemoveFriends)
 
+router.get('/search/:keyword',verifyToken,searchHandler)
 export default router

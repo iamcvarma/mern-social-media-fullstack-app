@@ -1,22 +1,26 @@
 import React from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
+import FlexBetween from "components/FlexBetween";
 
 const LoginPage = () => {
   const theme = useTheme();
   const isNonMobileScreen = useMediaQuery("(min-width:1000px)");
   return (
-    <Box>
-      <Box
-        width="100%"
+    <>
+      <FlexBetween
+        padding="1rem 6%"
         backgroundColor={theme.palette.background.alt}
-        p="1rem 6%"
-        textAlign="center"
       >
-        <Typography fontWeight="bold" fontSize="32px" color="primary">
-          Bubble Wrap
-        </Typography>
-      </Box>
+        <FlexBetween
+          marginX="auto"
+          sx={{
+            cursor: "pointer",
+          }}
+        >
+          <img alt="logo" src="../assets/logo.png" width="120px" />
+        </FlexBetween>
+      </FlexBetween>
       <Box
         width={isNonMobileScreen ? "50%" : "93%"}
         p="2rem"
@@ -29,7 +33,7 @@ const LoginPage = () => {
         </Typography>
         <Form />
       </Box>
-    </Box>
+    </>
   );
 };
 
