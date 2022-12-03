@@ -1,8 +1,10 @@
 import { useTheme } from "@emotion/react";
+import { Search } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
   Fade,
+  InputAdornment,
   InputBase,
   Typography,
 } from "@mui/material";
@@ -69,9 +71,17 @@ const SearchResults = () => {
             borderRadius: "1rem",
             padding: "0.4rem 1rem",
           }}
+          startAdornment=<InputAdornment>
+            <Search
+              sx={{
+                marginRight: "0.5rem",
+                color: showSearch ? palette.primary.dark : palette.neutral.alt,
+              }}
+            />
+          </InputAdornment>
         />
       </FlexBetween>
-      <Fade in={showSearch} sx={{display:showSearch?"block":"none"}}>
+      <Fade in={showSearch} sx={{ display: showSearch ? "block" : "none" }}>
         {
           <WidgetWrapper marginTop="1rem">
             {isLoading ? (
