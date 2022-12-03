@@ -84,7 +84,7 @@ const Form = () => {
       body: JSON.stringify(values),
     });
     const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
+    onSubmitProps?.resetForm();
     if (loggedIn) {
       dispatch(
         setLogin({
@@ -263,6 +263,23 @@ const Form = () => {
               {isLogin
                 ? "Don't have an account? Sign up here"
                 : "Already have an account? Login here"}
+            </Typography>
+            <Typography
+              onClick={() => {
+                login({email:process.env.REACT_APP_DUMMY_USERNAME,
+                  password:process.env.REACT_APP_DUMMY_PASSWORD
+                },null)
+              }}
+              sx={{
+                textDecoration: "underline",
+                color: palette.primary.main,
+                "&:hover": {
+                  cursor: "pointer",
+                  color: palette.primary.main,
+                },
+              }}
+            >
+              Click here to log into TEST account
             </Typography>
           </Box>
         </form>
