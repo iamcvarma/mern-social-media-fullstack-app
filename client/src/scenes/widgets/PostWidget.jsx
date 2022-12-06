@@ -5,6 +5,7 @@ import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
   ShareOutlined,
+  DeleteOutline,
 } from "@mui/icons-material";
 
 import {
@@ -22,7 +23,7 @@ import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPost } from "state";
+import { deletePost, setPost } from "state";
 
 const PostWidget = ({
   postId,
@@ -79,6 +80,19 @@ const PostWidget = ({
     setUserComment("");
     dispatch(setPost({ post: newPost }));
   };
+  
+  const deleteComment=async () =>{
+    await fetch(`${process.env.REACT_APP_BASE_URL}/posts/${postId}`,
+    {
+      method:"DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      }
+    })
+    dispatch(deletePost({id:postId}))
+
+  }
 
   return (
     <WidgetWrapper m="2rem 0">
@@ -119,11 +133,18 @@ const PostWidget = ({
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-        <IconButton>
-          <ShareOutlined />
-        </IconButton>
+        <FlexBetween>
+          <IconButton>
+            <ShareOutlined />
+          </IconButton>
+          {postUserId===loggedInUser && <IconButton>
+            <DeleteOutline 
+            onClick={deleteComment}
+            />
+          </IconButton>}
+        </FlexBetween>
       </FlexBetween>
-      <Fade in={isComments} sx={{display:isComments?"block":"none"}}>
+      <Fade in={isComments} sx={{ display: isComments ? "block" : "none" }}>
         <Box>
           <Box mt="0.5rem">
             {comments.map((comment, i) => (
@@ -171,7 +192,7 @@ const PostWidget = ({
               POST
             </Button>
           </FlexBetween>
-        </Box> 
+        </Box>
       </Fade>
     </WidgetWrapper>
   );

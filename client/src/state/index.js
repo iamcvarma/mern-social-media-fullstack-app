@@ -37,9 +37,12 @@ export const authSlice = createSlice({
         post._id === newPost._id ? newPost : post
       );
     },
+    deletePost:(state,{payload:{id}})=>{
+      state.posts = state.posts.filter(post=>post._id!==id)
+    }
   },
 });
 
-export const { setFriends, setLogin, setLogout, setMode, setPost, setPosts } =
+export const { setFriends, setLogin, setLogout, setMode, setPost, setPosts ,deletePost} =
   authSlice.actions;
 export default authSlice.reducer;
