@@ -25,17 +25,18 @@ import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 const UserWidget = ({ userId, picturePath, isProfile }) => {
   const [user, setUser] = useState(null);
   const [isTwitterLinkOpen, setIsTwitterLinkOpen] = useState(false);
   const [isLinkedInOpen, setIsLinkedInOpen] = useState(false);
+  const [isUpdateNameOpen,setIsUpdateNameOpen] = useState(false)
   const twitterRef = useRef(null);
   const linkedinRef = useRef(null);
+  const firstNameRef=useRef(null);
+  const lastNameRef = useRef(null);
   const { palette } = useTheme();
-  const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
@@ -103,6 +104,22 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
       })
       .catch((err) => alert(err.message));
   };
+  const handleUpdataNameInput = () => {
+    if (!firstNameRef.current && !lastNameRef.current) return;
+    fetch(`${process.env.REACT_APP_BASE_URL}/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ firstName:firstNameRef.current.value ,lastName:lastNameRef.current.value}),
+    })
+      .then(() => {
+        getUser();
+        setIsUpdateNameOpen(false);
+      })
+      .catch((err) => alert(err.message));
+  };
 
   return (
     <>
@@ -111,7 +128,6 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
         <FlexBetween
           gap="0.5rem"
           pb="1.1rem"
-          onClick={() => navigate(`/profile/${userId}`)}
         >
           <FlexBetween gap="1rem">
             <UserImage image={picturePath} />
@@ -132,7 +148,11 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
               <Typography color={medium}>{friends.length} friends</Typography>
             </Box>
           </FlexBetween>
+          {!isProfile && (<IconButton
+          onClick={()=>setIsUpdateNameOpen(true)}
+          >
           <ManageAccountsOutlined />
+          </IconButton>)}
         </FlexBetween>
 
         <Divider />
@@ -308,6 +328,37 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
         <DialogActions>
           <Button onClick={() => setIsLinkedInOpen(false)}>Cancel</Button>
           <Button onClick={handleLinkedInInput}>Save</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={isUpdateNameOpen} onClose={() => setIsUpdateNameOpen(false)}>
+        <DialogTitle>Update Your Name</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter your new first and last name to update
+          </DialogContentText>
+          <TextField
+            autoFocus
+            inputRef={firstNameRef}
+            margin="dense"
+            id="name"
+            label="First Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            inputRef={lastNameRef}
+            margin="dense"
+            id="name"
+            label="Last Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsUpdateNameOpen(false)}>Cancel</Button>
+          <Button onClick={handleUpdataNameInput}>Save</Button>
         </DialogActions>
       </Dialog>
     </>

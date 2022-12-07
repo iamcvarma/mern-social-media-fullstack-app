@@ -1,16 +1,45 @@
 import React from "react";
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useTheme,
+  useMediaQuery,
+  keyframes,
+} from "@mui/material";
 import Form from "./Form";
 import FlexBetween from "components/FlexBetween";
 
 const LoginPage = () => {
   const theme = useTheme();
   const isNonMobileScreen = useMediaQuery("(min-width:1000px)");
+  const bgGradient = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`;
   return (
-    <>
+    <Box
+      sx={{
+        width:"100vw",
+        height:"100vh",
+        background: "linear-gradient(83deg,#0f73e1,#5091dd,#5350dd)",
+        backgroundSize: "180% 180%",
+        animation: `${bgGradient} 9s ease infinite`,
+      }}
+    >
       <FlexBetween
-        padding="1rem 6%"
-        backgroundColor={theme.palette.background.alt}
+      sx={{
+        padding:"1rem 6%",
+        backgroundColor:`${theme.palette.background.alt}`,
+        backdropFilter:" blur(11px) saturate(142%)"
+      }}
+        
       >
         <FlexBetween
           marginX="auto"
@@ -33,7 +62,7 @@ const LoginPage = () => {
         </Typography>
         <Form />
       </Box>
-    </>
+    </Box>
   );
 };
 

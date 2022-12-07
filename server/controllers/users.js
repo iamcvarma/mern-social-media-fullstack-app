@@ -73,9 +73,11 @@ export const addRemoveFriends = async (req, res) => {
 export const patchUser = async(req,res) =>{
     const {id} = req.params;
     const user = await User.findById(id);
-    const {twitter,linkedin} = req.body;
+    const {twitter,linkedin,firstName,lastName} = req.body;
     if (twitter) user.twitter=twitter
     if (linkedin) user.linkedin = linkedin
+    if (firstName) user.firstName = firstName
+    if (lastName) user.lastName = lastName
     await user.save()
     return res.status(200).json({message:"success"})
 }
