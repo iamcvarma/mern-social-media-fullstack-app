@@ -80,22 +80,20 @@ const PostWidget = ({
     setUserComment("");
     dispatch(setPost({ post: newPost }));
   };
-  
-  const deleteComment=async () =>{
-    await fetch(`${process.env.REACT_APP_BASE_URL}/posts/${postId}`,
-    {
-      method:"DELETE",
+
+  const deleteComment = async () => {
+    await fetch(`${process.env.REACT_APP_BASE_URL}/posts/${postId}`, {
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-      }
-    })
-    dispatch(deletePost({id:postId}))
-
-  }
+      },
+    });
+    dispatch(deletePost({ id: postId }));
+  };
 
   return (
-    <WidgetWrapper m="2rem 0">
+    <WidgetWrapper m="0 0 2rem 0">
       <Friend
         friendId={postUserId}
         name={name}
@@ -137,11 +135,11 @@ const PostWidget = ({
           <IconButton>
             <ShareOutlined />
           </IconButton>
-          {postUserId===loggedInUser && <IconButton>
-            <DeleteOutline 
-            onClick={deleteComment}
-            />
-          </IconButton>}
+          {postUserId === loggedInUser && (
+            <IconButton onClick={deleteComment}>
+              <DeleteOutline />
+            </IconButton>
+          )}
         </FlexBetween>
       </FlexBetween>
       <Fade in={isComments} sx={{ display: isComments ? "block" : "none" }}>

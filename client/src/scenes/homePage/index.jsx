@@ -34,7 +34,7 @@ const HomePage = () => {
           <Box flexBasis="26%">
             <SearchResults />
 
-            <Box m="2rem 0" />
+            <Box m="1rem 0" />
             <FriendListWidget userId={_id} />
           </Box>
         )}

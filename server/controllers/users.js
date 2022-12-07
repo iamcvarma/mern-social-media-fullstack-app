@@ -70,6 +70,16 @@ export const addRemoveFriends = async (req, res) => {
   }
 };
 
+export const patchUser = async(req,res) =>{
+    const {id} = req.params;
+    const user = await User.findById(id);
+    const {twitter,linkedin} = req.body;
+    if (twitter) user.twitter=twitter
+    if (linkedin) user.linkedin = linkedin
+    await user.save()
+    return res.status(200).json({message:"success"})
+}
+
 export const searchHandler = async (req,res)=>{
   try {
 

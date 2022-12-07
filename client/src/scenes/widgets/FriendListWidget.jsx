@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Box, Typography, useTheme } from "@mui/material";
 import Friend from "components/Friend";
+import PersonOffIcon from "@mui/icons-material/PersonOff";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,27 +31,37 @@ const FriendListWidget = ({ userId }) => {
     getFriends();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <WidgetWrapper>
-      <Typography
+      {friends.length>0 && (<Typography
         color={palette.neutral.dark}
         varient="h5"
         fontWeight="500"
-        sx={{ md: "1.5rem" }}
+        sx={{ mb: "1.5rem" }}
       >
         Friend List
-      </Typography>
+      </Typography>)}
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {friends.map((friend) => (
-          <Friend
-            key={friend._id}
-            friendId={friend._id}
-            name={`${friend.firstName} ${friend.lastName}`}
-            subtitle={friend.occupation}
-            userPicturePath={friend.picturePath}
-          />
-        ))}
+        {friends.length === 0 ? (
+          <WidgetWrapper
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <PersonOffIcon />
+            <Typography>The user has yet to add new friends</Typography>
+          </WidgetWrapper>
+        ) : (
+          friends.map((friend) => (
+            <Friend
+              key={`${friend._id}`}
+              friendId={friend._id}
+              name={`${friend.firstName} ${friend.lastName}`}
+              subtitle={friend.occupation}
+              userPicturePath={friend.picturePath}
+            />
+          ))
+        )}
       </Box>
     </WidgetWrapper>
   );

@@ -71,19 +71,19 @@ const SearchResults = () => {
             borderRadius: "1rem",
             padding: "0.4rem 1rem",
           }}
-          startAdornment=<InputAdornment>
+          startAdornment={<InputAdornment position="start">
             <Search
               sx={{
                 marginRight: "0.5rem",
                 color: showSearch ? palette.primary.dark : palette.neutral.alt,
               }}
             />
-          </InputAdornment>
+          </InputAdornment>}
         />
       </FlexBetween>
-      <Fade in={showSearch} sx={{ display: showSearch ? "block" : "none" }}>
+      <Fade in={showSearch} >
         {
-          <WidgetWrapper marginTop="1rem">
+          <WidgetWrapper marginTop="1rem" height="8rem">
             {isLoading ? (
               <CircularProgress
                 sx={{
@@ -96,7 +96,7 @@ const SearchResults = () => {
                 {friends.length > 0 ? (
                   friends.map((friend) => (
                     <Friend
-                      key={friend._id}
+                      key={`${friend._id}`}
                       friendId={friend._id}
                       name={`${friend.firstName} ${friend.lastName}`}
                       subtitle={friend.occupation}
@@ -114,8 +114,8 @@ const SearchResults = () => {
             )}
           </WidgetWrapper>
         }
-      </Fade>
-    </>
+         </Fade>
+        </>
   );
 };
 

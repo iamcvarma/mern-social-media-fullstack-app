@@ -37,6 +37,14 @@ const userSchema = new mongoose.Schema(
     occupation: String,
     viewedProfile: Number,
     impressions: Number,
+    twitter:{
+      type:String,
+      default:"",
+    },
+    linkedin:{
+      type:String,
+      default:"",
+    },
   },
   { timestamps: true }
 );
