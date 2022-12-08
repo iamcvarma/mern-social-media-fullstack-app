@@ -7,6 +7,7 @@ import {
   useMediaQuery,
   Typography,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
@@ -48,6 +49,7 @@ const initialValuesLogin = {
 
 const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const [isLoading,setIsLoading] = useState(false)
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,6 +58,7 @@ const Form = () => {
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
+    setIsLoading(true)
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
@@ -75,9 +78,11 @@ const Form = () => {
     if (savedUser) {
       setPageType("login");
     }
+    setIsLoading(false)
   };
 
   const login = async (values, onSubmitProps) => {
+    setIsLoading(true)
     const loggedInResponse = await fetch(
       `${process.env.REACT_APP_BASE_URL}/auth/login`,
       {
@@ -95,6 +100,7 @@ const Form = () => {
           token: loggedIn.token,
         })
       );
+      setIsLoading(false)
       navigate("/home");
     }
   };
@@ -242,7 +248,15 @@ const Form = () => {
                 size="large"
                 width="50%"
               >
+                <Box
+                display="flex"
+                alignItems="center"
+                padding="0px"
+                >
+
                 {isLogin ? "LOGIN" : "REGISTER"}
+                {isLoading && <CircularProgress color="secondary" size="1rem" sx={{marginLeft:"5px"}} />}
+                </Box>
               </Button>
             </Box>
             {isLogin ? (
@@ -275,23 +289,6 @@ const Form = () => {
                 Try out now
               </Button>
             </Box>
-            {/* <Typography
-              onClick={() => {
-                login({email:process.env.REACT_APP_DUMMY_USERNAME,
-                  password:process.env.REACT_APP_DUMMY_PASSWORD
-                },null)
-              }}
-              sx={{
-                textDecoration: "underline",
-                color: palette.primary.main,
-                "&:hover": {
-                  cursor: "pointer",
-                  color: palette.primary.main,
-                },
-              }}
-            >
-              Click here to log into TEST account
-            </Typography> */}
           </Box>
         </form>
       )}
