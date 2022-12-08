@@ -83,7 +83,7 @@ const SearchResults = () => {
       </FlexBetween>
       <Fade in={showSearch} >
         {
-          <WidgetWrapper marginTop="1rem" height="8rem">
+          <WidgetWrapper marginTop="1rem" minHeight="8rem" overflow="auto">
             {isLoading ? (
               <CircularProgress
                 sx={{

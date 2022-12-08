@@ -69,7 +69,7 @@ const Form = () => {
         body: formData,
       }
     );
-    const {data :savedUser} = await savedUserResponse.json();
+    const { data: savedUser } = await savedUserResponse.json();
     onSubmitProps.resetForm();
 
     if (savedUser) {
@@ -78,11 +78,14 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch(`${process.env.REACT_APP_BASE_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
+    const loggedInResponse = await fetch(
+      `${process.env.REACT_APP_BASE_URL}/auth/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      }
+    );
     const loggedIn = await loggedInResponse.json();
     onSubmitProps?.resetForm();
     if (loggedIn) {
@@ -100,7 +103,6 @@ const Form = () => {
     if (isLogin) await login(values, onSubmitProps);
     if (isRegister) await register(values, onSubmitProps);
   };
-
 
   return (
     <Formik
@@ -233,38 +235,47 @@ const Form = () => {
           </Box>
           {/* button  */}
           <Box>
-            <Button
-              fullWidth
-              type="submit"
-              sx={{
-                m: "2rem 0",
-                p: "1rem",
-                backgroundColor: palette.primary.main,
-                color: palette.background.alt,
-                "&:hover": { color: palette.primary.main },
-              }}
-            >
-              {isLogin ? "LOGIN" : "REGISTER"}
-            </Button>
-            <Typography
+            <Box display="flex" flexDirection="row-reverse" margin="1rem">
+              <Button
+                variant="contained"
+                type="submit"
+                size="large"
+                width="50%"
+              >
+                {isLogin ? "LOGIN" : "REGISTER"}
+              </Button>
+            </Box>
+            {isLogin ? (
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Typography>Don't have an account?</Typography>
+                <Button variant="text" onClick={() => setPageType("register")}>
+                  Sign up
+                </Button>
+              </Box>
+            ) : (
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Typography>Already have an account?</Typography>
+                <Button variant="text" onClick={() => setPageType("login")}>
+                  Login
+                </Button>
+              </Box>
+            )}
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Typography>
+                Don't want to create an account?
+              </Typography>
+              <Button
+              variant="text"
               onClick={() => {
-                setPageType(isLogin ? "register" : "login");
-                resetForm();
+                login({email:process.env.REACT_APP_DUMMY_USERNAME,
+                  password:process.env.REACT_APP_DUMMY_PASSWORD
+                },null)
               }}
-              sx={{
-                textDecoration: "underline",
-                color: palette.primary.main,
-                "&:hover": {
-                  cursor: "pointer",
-                  color: palette.primary.main,
-                },
-              }}
-            >
-              {isLogin
-                ? "Don't have an account? Sign up here"
-                : "Already have an account? Login here"}
-            </Typography>
-            <Typography
+              >
+                Try out now
+              </Button>
+            </Box>
+            {/* <Typography
               onClick={() => {
                 login({email:process.env.REACT_APP_DUMMY_USERNAME,
                   password:process.env.REACT_APP_DUMMY_PASSWORD
@@ -280,7 +291,7 @@ const Form = () => {
               }}
             >
               Click here to log into TEST account
-            </Typography>
+            </Typography> */}
           </Box>
         </form>
       )}
