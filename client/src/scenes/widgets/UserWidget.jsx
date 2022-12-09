@@ -23,44 +23,25 @@ import {
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useSelector } from "react-redux";
-import { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useRef } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { updateUser } from "state";
 
-const UserWidget = ({ userId, picturePath, isProfile }) => {
-  const [user, setUser] = useState(null);
+const UserWidget = ({ user, isProfile }) => {
   const [isTwitterLinkOpen, setIsTwitterLinkOpen] = useState(false);
   const [isLinkedInOpen, setIsLinkedInOpen] = useState(false);
-  const [isUpdateNameOpen,setIsUpdateNameOpen] = useState(false)
+  const [isUpdateNameOpen, setIsUpdateNameOpen] = useState(false);
   const twitterRef = useRef(null);
   const linkedinRef = useRef(null);
-  const firstNameRef=useRef(null);
+  const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const { palette } = useTheme();
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
-
-  const getUser = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/users/${userId}`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    const { data: user } = await response.json();
-    setUser(user);
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (!user) {
-    return null;
-  }
 
   const {
     firstName,
@@ -70,6 +51,8 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
     viewedProfile,
     impressions,
     friends,
+    _id: userId,
+    picturePath,
   } = user;
 
   const handleTwitterInput = () => {
@@ -83,7 +66,7 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
       body: JSON.stringify({ twitter: twitterRef.current.value }),
     })
       .then(() => {
-        getUser();
+        dispatch(updateUser({ twitter: twitterRef.current.value }));
         setIsTwitterLinkOpen(false);
       })
       .catch((err) => alert(err.message));
@@ -99,7 +82,7 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
       body: JSON.stringify({ linkedin: linkedinRef.current.value }),
     })
       .then(() => {
-        getUser();
+        dispatch(updateUser({ linkedin: linkedinRef.current.value }));
         setIsLinkedInOpen(false);
       })
       .catch((err) => alert(err.message));
@@ -112,10 +95,18 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ firstName:firstNameRef.current.value ,lastName:lastNameRef.current.value}),
+      body: JSON.stringify({
+        firstName: firstNameRef.current.value,
+        lastName: lastNameRef.current.value,
+      }),
     })
       .then(() => {
-        getUser();
+        dispatch(
+          updateUser({
+            firstName: firstNameRef.current.value,
+            lastName: lastNameRef.current.value,
+          })
+        );
         setIsUpdateNameOpen(false);
       })
       .catch((err) => alert(err.message));
@@ -125,10 +116,7 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
     <>
       <WidgetWrapper>
         {/* FIRST ROW */}
-        <FlexBetween
-          gap="0.5rem"
-          pb="1.1rem"
-        >
+        <FlexBetween gap="0.5rem" pb="1.1rem">
           <FlexBetween gap="1rem">
             <UserImage image={picturePath} />
             <Box>
@@ -148,11 +136,11 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
               <Typography color={medium}>{friends.length} friends</Typography>
             </Box>
           </FlexBetween>
-          {!isProfile && (<IconButton
-          onClick={()=>setIsUpdateNameOpen(true)}
-          >
-          <ManageAccountsOutlined />
-          </IconButton>)}
+          {!isProfile && (
+            <IconButton onClick={() => setIsUpdateNameOpen(true)}>
+              <ManageAccountsOutlined />
+            </IconButton>
+          )}
         </FlexBetween>
 
         <Divider />
@@ -174,13 +162,15 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
         {/* THIRD ROW */}
         <Box p="1rem 0">
           <FlexBetween mb="0.5rem">
-            <Typography color={medium}>Who's viewed your profile</Typography>
+            <Typography color={medium}>
+              Peope who visited your profile
+            </Typography>
             <Typography color={main} fontWeight="500">
               {viewedProfile}
             </Typography>
           </FlexBetween>
           <FlexBetween>
-            <Typography color={medium}>Impressions of your post</Typography>
+            <Typography color={medium}>People who liked your posts</Typography>
             <Typography color={main} fontWeight="500">
               {impressions}
             </Typography>
@@ -217,8 +207,7 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
               </Box>
             </CardActionArea>
             {!isProfile && (
-              <IconButton
-               onClick={() => setIsTwitterLinkOpen(true)}>
+              <IconButton onClick={() => setIsTwitterLinkOpen(true)}>
                 <EditOutlined sx={{ color: main }} />
               </IconButton>
             )}
@@ -330,7 +319,10 @@ const UserWidget = ({ userId, picturePath, isProfile }) => {
           <Button onClick={handleLinkedInInput}>Save</Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={isUpdateNameOpen} onClose={() => setIsUpdateNameOpen(false)}>
+      <Dialog
+        open={isUpdateNameOpen}
+        onClose={() => setIsUpdateNameOpen(false)}
+      >
         <DialogTitle>Update Your Name</DialogTitle>
         <DialogContent>
           <DialogContentText>

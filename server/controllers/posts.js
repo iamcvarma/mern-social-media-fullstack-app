@@ -71,6 +71,13 @@ export const likePost = async (req, res) => {
       { new: true }
     );
     res.status(200).json({ data: updatedPost });
+    const originalPoster = await User.findById(post.userId)
+    if (isLiked){
+      originalPoster.impressions--;
+    } else {
+      originalPoster.impressions++;
+    }
+    await originalPoster.save()
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

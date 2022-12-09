@@ -9,7 +9,7 @@ import SearchResults from "components/SearchResults";
 
 const HomePage = () => {
   const isNonMobileScreen = useMediaQuery("(min-width:1000px)");
-  const { _id, picturePath } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   return (
     <Box>
       <NavBar />
@@ -21,21 +21,21 @@ const HomePage = () => {
         justifyContent="space-between"
       >
         <Box flexBasis={isNonMobileScreen ? "26%" : undefined}>
-          <UserWidget userId={_id} picturePath={picturePath} />
+          <UserWidget user = {user} />
         </Box>
         <Box
           flexBasis={isNonMobileScreen ? "42%" : undefined}
           mt={isNonMobileScreen ? undefined : "2rem"}
         >
-          <MyPostWidget picturePath={picturePath} />
-          <PostsWidget userId={_id} />
+          <MyPostWidget picturePath={user.picturePath} />
+          <PostsWidget userId={user._id} />
         </Box>
         {isNonMobileScreen && (
           <Box flexBasis="26%">
             <SearchResults />
 
             <Box m="1rem 0" />
-            <FriendListWidget userId={_id} />
+            <FriendListWidget userId={user._id} />
           </Box>
         )}
       </Box>

@@ -81,7 +81,7 @@ const PostWidget = ({
     dispatch(setPost({ post: newPost }));
   };
 
-  const deleteComment = async () => {
+  const handleDeletePost = async () => {
     await fetch(`${process.env.REACT_APP_BASE_URL}/posts/${postId}`, {
       method: "DELETE",
       headers: {
@@ -136,7 +136,7 @@ const PostWidget = ({
             <ShareOutlined />
           </IconButton>
           {postUserId === loggedInUser && (
-            <IconButton onClick={deleteComment}>
+            <IconButton onClick={handleDeletePost}>
               <DeleteOutline />
             </IconButton>
           )}

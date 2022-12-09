@@ -18,6 +18,7 @@ import {
   IconButton,
   useMediaQuery,
   Fade,
+  CircularProgress,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Dropzone from "react-dropzone";
@@ -42,6 +43,7 @@ const MyPostWidget = ({ picturePath }) => {
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
+    setIsLoading(true)
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", post);
@@ -61,6 +63,7 @@ const MyPostWidget = ({ picturePath }) => {
     dispatch(setPosts({ posts }));
     setImage(null);
     setPost('');
+    setIsLoading(false)
   };
 
   return (
@@ -183,7 +186,8 @@ const MyPostWidget = ({ picturePath }) => {
             }
           }}
         >
-          POST
+          POST 
+          {isLoading && <CircularProgress color="secondary" size="1rem" sx={{marginLeft:"5px"}} />}
         </Button>
       </FlexBetween>
     </WidgetWrapper>
