@@ -38,7 +38,9 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage }); //to upload user files to disk
 
 //auth routes
-
+app.get('/',(req,res)=>{
+  res.status(200).json({github:"https://github.com/iamcvarma"})
+})
 app.post("/auth/register", upload.single("picture"), uploadToS3, register);
 app.post(
   "/posts",
